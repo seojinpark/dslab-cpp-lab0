@@ -5,10 +5,10 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS} -std=c++14 -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS} -std=c++17 -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g")
-
+set(ABSL_PROPAGATE_CXX_STD ON)
 
 # cloning gRPC at configure time.
 message(STATUS "Using gRPC via add_subdirectory (FetchContent).")
@@ -16,8 +16,9 @@ include(FetchContent)
 FetchContent_Declare(
   grpc
   GIT_REPOSITORY https://github.com/grpc/grpc.git
-  GIT_TAG        v1.38.1)
+  GIT_TAG        v1.57.0)
 FetchContent_MakeAvailable(grpc)
+# GIT_TAG        v1.38.1)
 
 # Since FetchContent uses add_subdirectory under the hood, we can use
 # the grpc targets directly from this build.
@@ -66,7 +67,7 @@ target_link_libraries(dp_grpc_proto
 
 # Linking info for runtime.
 add_executable(wcClient
-  "clientMain.cpp" "rpcClient.cpp")
+  "src/clientMain.cpp" "src/rpcClient.cpp")
 target_link_libraries(wcClient
   dp_grpc_proto
   ${_REFLECTION}
@@ -75,7 +76,7 @@ target_link_libraries(wcClient
   ${TORCH_LIBRARIES})
 
 add_executable(wcServer
-  "serverMain.cpp" "rpcService.cpp")
+  "src/serverMain.cpp" "src/rpcService.cpp")
 target_link_libraries(wcServer
   dp_grpc_proto
   ${_REFLECTION}
@@ -84,4 +85,4 @@ target_link_libraries(wcServer
   ${TORCH_LIBRARIES})
 
 
-set_property(TARGET runtime PROPERTY CXX_STANDARD 14)
+set_property(TARGET wcClient wcServer PROPERTY CXX_STANDARD 17)

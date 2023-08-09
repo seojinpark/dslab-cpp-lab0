@@ -8,7 +8,7 @@
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/health_check_service_interface.h>
-#include "runtime.grpc.pb.h"
+#include "accumulator.grpc.pb.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;
@@ -18,7 +18,7 @@ using grpc::Status;
 
 
 char* myAddr;           // includes port number.
-std::unique_ptr<RuntimeServiceImpl> grpcService;
+std::unique_ptr<AccumulatorServiceImpl> grpcService;
 std::unique_ptr<grpc::Server> grpcServer;
 
 
@@ -57,7 +57,6 @@ void parse_args(int argc, char** argv) {
 }
 
 int main(int argc, char** argv) {
-  shutdownRequested = false;
   parse_args(argc, argv);
   
   std::cout << "myAddr: " << myAddr << std::endl;

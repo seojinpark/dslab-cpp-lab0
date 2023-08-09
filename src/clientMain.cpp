@@ -8,8 +8,6 @@ char* ipAndPort;           // includes port number.
 char* inputText;
 bool resetCounter = false;
 bool shutdownServer = false;
-std::unique_ptr<RuntimeServiceImpl> grpcService;
-std::unique_ptr<grpc::Server> grpcServer;
 
 void parse_args(int argc, char** argv) {
   static struct option long_options[] = {

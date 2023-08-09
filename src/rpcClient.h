@@ -5,7 +5,7 @@
 #include <string>
 
 #include <grpcpp/grpcpp.h>
-#include "runtime.grpc.pb.h"
+#include "accumulator.grpc.pb.h"
 
 using grpc::ServerContext;
 using grpc::Status;
@@ -16,7 +16,7 @@ using grpc::Status;
 class RpcClient {
  public:
   RpcClient(std::shared_ptr<grpc::ChannelInterface> channel)
-    : stub_(Runtime::NewStub(channel)) {}
+    : stub_(Accumulator::NewStub(channel)) {}
   
   std::string AddWordCount(std::string text);
   int GetWordCount();

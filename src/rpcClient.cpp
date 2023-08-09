@@ -3,7 +3,19 @@
 #include <string>
 
 #include <grpcpp/grpcpp.h>
-#include "runtime.grpc.pb.h"
+#include "accumulator.grpc.pb.h"
+
+std::string
+RpcClient::AddWordCount(std::string text) {
+  // TODO: implement
+  return "";
+}
+
+int
+RpcClient::GetWordCount() {
+  // TODO: implement
+  return 0;
+}
 
 std::string
 RpcClient::Shutdown() {
@@ -35,22 +47,23 @@ RpcClient::ResetCounter() {
   }
 }
 
-std::string
-RpcClient::P2PCommunication(const std::string& taskName,
-                            const std::string& tsrData, int tag) {
-  P2PCommunicationRequest request;
-  request.set_task_name(taskName);
-  request.set_tensor_data(tsrData);
-  request.set_tag(tag);
 
-  grpc::ClientContext context;
-  StandardReply reply;
-  Status status = stub_->P2PCommunication(&context, request, &reply);
-  if (status.ok()) {
-    return reply.message();
-  } else {
-    DP_LOG(ERROR, "Failed to invoke P2PCommunication. code: %d, msg: %s.",
-          status.error_code(), status.error_message().c_str());
-    return "Failed to invoke P2PCommunication.";
-  }
-}
+// std::string
+// RpcClient::P2PCommunication(const std::string& taskName,
+//                             const std::string& tsrData, int tag) {
+//   P2PCommunicationRequest request;
+//   request.set_task_name(taskName);
+//   request.set_tensor_data(tsrData);
+//   request.set_tag(tag);
+
+//   grpc::ClientContext context;
+//   StandardReply reply;
+//   Status status = stub_->P2PCommunication(&context, request, &reply);
+//   if (status.ok()) {
+//     return reply.message();
+//   } else {
+//     DP_LOG(ERROR, "Failed to invoke P2PCommunication. code: %d, msg: %s.",
+//           status.error_code(), status.error_message().c_str());
+//     return "Failed to invoke P2PCommunication.";
+//   }
+// }
