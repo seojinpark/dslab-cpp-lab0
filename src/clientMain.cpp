@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
     client.Shutdown();
     std::cout << "Shutdown requested." << std::endl;
   } else {
-    // TODO: modify for extra credit.
+    // TODO: modify for the last point.
     int wc = client.AddWordCount(inputText);
     int wcSum = client.GetAllWordCount();
     std::cout << "Word count: " << wc << std::endl
