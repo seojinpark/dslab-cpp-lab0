@@ -45,12 +45,10 @@ AccumulatorServiceImpl::AddWordCount(ServerContext* context,
     const AddWordCountRequest* request,
     AddWordCountReply* reply) {
   UNUSED(context);
-  int wc = countWords(request->text());
-  wcSum += wc;
-  reply->set_word_count(wc);
 
-  // TODO: implement
+  // TODO (Milestone1): implement
   // You may use AccumulatorServiceImpl::countWords().
+  // Use wcSum variable to keep track the accumulated word counts.
   return Status::OK;
 }
 
@@ -61,21 +59,11 @@ AccumulatorServiceImpl::GetAllWordCount(ServerContext* context,
   UNUSED(context);
   UNUSED(request);
 
-  reply->set_cummulative_count(wcSum);
-
-  // TODO: implement
+  // TODO (Milestone1): implement
   return Status::OK;
 }
 
-Status
-AccumulatorServiceImpl::ResetCounter(ServerContext* context,
-    const Empty* request, StandardReply* reply) {
-  UNUSED(context);
-  UNUSED(request);
-
-  // TODO: implement
-  return Status::OK;
-}
+// TODO (Milestone2): implement ResetCounter handler
 
 Status
 AccumulatorServiceImpl::Shutdown(ServerContext* context, const Empty* request,

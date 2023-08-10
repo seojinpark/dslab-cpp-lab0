@@ -31,10 +31,9 @@ class AccumulatorServiceImpl final : public Accumulator::Service {
   Status GetAllWordCount(ServerContext* context,
                       const Empty* request,
                       GetAllWordCountReply* reply) override;
-  Status ResetCounter(ServerContext* context, const Empty* request,
-              StandardReply* reply) override;
   Status Shutdown(ServerContext* context, const Empty* request,
                   StandardReply* reply) override;
+  //TODO (Milestone2): define ResetCounter.
 
   int countWords(const std::string& text);
 

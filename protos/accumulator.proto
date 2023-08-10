@@ -6,7 +6,6 @@ syntax = "proto3";
 service Accumulator {
   rpc AddWordCount(AddWordCountRequest) returns (AddWordCountReply) {}
   rpc GetAllWordCount(Empty) returns (GetAllWordCountReply) {}
-  rpc ResetCounter(Empty) returns (StandardReply) {}
   rpc Shutdown(Empty) returns (StandardReply) {}
 }
 
