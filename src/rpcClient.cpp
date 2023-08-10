@@ -5,14 +5,39 @@
 #include <grpcpp/grpcpp.h>
 #include "accumulator.grpc.pb.h"
 
-std::string
+int
 RpcClient::AddWordCount(std::string text) {
+
+  AddWordCountRequest request;
+  request.set_text(text);
+
+  grpc::ClientContext context;
+  AddWordCountReply reply;
+  Status status = stub_->AddWordCount(&context, request, &reply);
+  if (status.ok()) {
+    return reply.word_count();
+  } else {
+    std::cerr << "Failed to invoke AddWordCount. code: " << status.error_code()
+        << " msg: " << status.error_message().c_str() << std::endl;
+    return -1;
+  }
   // TODO: implement
-  return "";
 }
 
 int
-RpcClient::GetWordCount() {
+RpcClient::GetAllWordCount() {
+  Empty request;
+  
+  grpc::ClientContext context;
+  GetAllWordCountReply reply;
+  Status status = stub_->GetAllWordCount(&context, request, &reply);
+  if (status.ok()) {
+    return reply.cummulative_count();
+  } else {
+    std::cerr << "Failed to invoke AddWordCount. code: " << status.error_code()
+        << " msg: " << status.error_message().c_str() << std::endl;
+  }
+
   // TODO: implement
   return 0;
 }

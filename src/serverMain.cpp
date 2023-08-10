@@ -1,5 +1,6 @@
 #include <atomic>
 #include <iostream>
+#include <thread>
 #include <memory>
 #include <string>
 #include <getopt.h>
@@ -21,7 +22,6 @@ char* myAddr;           // includes port number.
 std::unique_ptr<AccumulatorServiceImpl> grpcService;
 std::unique_ptr<grpc::Server> grpcServer;
 
-
 void initGrpcServer() {
   std::string server_address(myAddr);
   grpcService = std::make_unique<AccumulatorServiceImpl>();
@@ -37,7 +37,7 @@ void initGrpcServer() {
 
 void parse_args(int argc, char** argv) {
   static struct option long_options[] = {
-      {"myAddr", required_argument, NULL, 'm'},
+      {"bind", required_argument, NULL, 'i'},
       {NULL, 0, NULL, 0}
   };
 
@@ -45,10 +45,9 @@ void parse_args(int argc, char** argv) {
   char ch;
   while ((ch = getopt_long(argc, argv, "t:a:", long_options, NULL)) != -1) {
     switch (ch) {
-      case 'm':
+      case 'i':
         myAddr = optarg;
         break;
-
 
       default:
         printf("?? getopt returned character code 0%o ??\n", ch);
@@ -59,10 +58,9 @@ void parse_args(int argc, char** argv) {
 int main(int argc, char** argv) {
   parse_args(argc, argv);
   
-  std::cout << "myAddr: " << myAddr << std::endl;
   initGrpcServer();
-  // grpcServer->Shutdown();
-  // std::cout << "grpc shutdown." << std::endl;
   grpcServer->Wait();
+  
+  shutdown_thread->join();
   return 0;
 }

@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <thread>
 
 #include <grpcpp/grpcpp.h>
 #include "accumulator.grpc.pb.h"
@@ -10,6 +11,8 @@
 using grpc::Server;
 using grpc::ServerContext;
 using grpc::Status;
+
+extern std::unique_ptr<std::thread> shutdown_thread;
 
 /**
  * GRPC service implementation for runtime.
@@ -24,17 +27,22 @@ class AccumulatorServiceImpl final : public Accumulator::Service {
  private:
   Status AddWordCount(ServerContext* context,
                       const AddWordCountRequest* request,
-                      StandardReply* reply) override;
-  Status GetWordCount(ServerContext* context,
+                      AddWordCountReply* reply) override;
+  Status GetAllWordCount(ServerContext* context,
                       const Empty* request,
-                      GetWordCountReply* reply) override;
+                      GetAllWordCountReply* reply) override;
   Status ResetCounter(ServerContext* context, const Empty* request,
               StandardReply* reply) override;
   Status Shutdown(ServerContext* context, const Empty* request,
                   StandardReply* reply) override;
 
+  int countWords(const std::string& text);
+
   // Pointer to grpc server instance. Used for shutdown.
   grpc::Server* grpcServerPtr;
+
+  // Counter for accumulating all word counts.
+  int wcSum = 0;
 };
 
 #endif // RPC_SERVICE_H

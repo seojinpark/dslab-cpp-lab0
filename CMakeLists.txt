@@ -2,13 +2,12 @@ cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 project(Accumulator)
 
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
+  set(CMAKE_BUILD_TYPE Debug)
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS} -std=c++17 -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g")
-set(ABSL_PROPAGATE_CXX_STD ON)
 
 # cloning gRPC at configure time.
 message(STATUS "Using gRPC via add_subdirectory (FetchContent).")

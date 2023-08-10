@@ -18,8 +18,8 @@ class RpcClient {
   RpcClient(std::shared_ptr<grpc::ChannelInterface> channel)
     : stub_(Accumulator::NewStub(channel)) {}
   
-  std::string AddWordCount(std::string text);
-  int GetWordCount();
+  int AddWordCount(std::string text);
+  int GetAllWordCount();
   std::string ResetCounter();
   std::string Shutdown();
 

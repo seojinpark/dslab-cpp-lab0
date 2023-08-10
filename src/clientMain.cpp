@@ -11,7 +11,7 @@ bool shutdownServer = false;
 
 void parse_args(int argc, char** argv) {
   static struct option long_options[] = {
-      {"serverAddr", required_argument, NULL, 'i'},
+      {"dest", required_argument, NULL, 'i'},
       {"reset", no_argument, NULL, 'r'},
       {"shutdown", no_argument, NULL, 's'},
       {"text", required_argument, NULL, 't'},
@@ -43,8 +43,6 @@ void parse_args(int argc, char** argv) {
 int main(int argc, char** argv) {
   parse_args(argc, argv);
 
-  std::cout << "serverAddr and Port: " << ipAndPort << std::endl;
-
   auto channel = grpc::CreateChannel(ipAndPort, grpc::InsecureChannelCredentials());
   RpcClient client(channel);
 
@@ -52,10 +50,13 @@ int main(int argc, char** argv) {
     // TODO: implement
   } else if (shutdownServer) {
     client.Shutdown();
+    std::cout << "Shutdown requested." << std::endl;
   } else {
-    client.AddWordCount(inputText);
-    int wc = client.GetWordCount();
-    std::cout << "Sum of all word counts: " << wc << std::endl;
+    // TODO: modify for extra credit.
+    int wc = client.AddWordCount(inputText);
+    int wcSum = client.GetAllWordCount();
+    std::cout << "Word count: " << wc << std::endl
+              << "Sum of all word counts: " << wcSum << std::endl;
   }
 
   return 0;

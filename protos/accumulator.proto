@@ -4,8 +4,8 @@ syntax = "proto3";
 
 // Interface exported by the server.
 service Accumulator {
-  rpc AddWordCount(AddWordCountRequest) returns (StandardReply) {}
-  rpc GetWordCount(Empty) returns (GetWordCountReply) {}
+  rpc AddWordCount(AddWordCountRequest) returns (AddWordCountReply) {}
+  rpc GetAllWordCount(Empty) returns (GetAllWordCountReply) {}
   rpc ResetCounter(Empty) returns (StandardReply) {}
   rpc Shutdown(Empty) returns (StandardReply) {}
 }
@@ -18,10 +18,9 @@ message AddWordCountRequest {
 
 message AddWordCountReply {
   int32 word_count = 1;
-  int32 cummulative_count = 2;
 }
 
-message GetWordCountReply {
+message GetAllWordCountReply {
   int32 cummulative_count = 1;
 }
 
