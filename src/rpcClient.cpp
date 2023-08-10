@@ -10,6 +10,7 @@ RpcClient::AddWordCount(std::string text) {
   AddWordCountRequest request;
   request.set_text(text);
   // TODO (Milestone1): implement rest.
+  return -1;
 }
 
 int
