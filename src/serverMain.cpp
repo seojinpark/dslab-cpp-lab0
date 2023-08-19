@@ -42,7 +42,7 @@ void parse_args(int argc, char** argv) {
   };
 
   // loop over all of the options
-  char ch;
+  signed char ch;
   while ((ch = getopt_long(argc, argv, "t:a:", long_options, NULL)) != -1) {
     switch (ch) {
       case 'i':
