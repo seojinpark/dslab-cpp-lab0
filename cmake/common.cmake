@@ -17,9 +17,7 @@
 # See cmake_externalproject/CMakeLists.txt for all-in-one cmake build
 # that automatically builds all the dependencies before building route_guide.
 
-cmake_minimum_required(VERSION 3.5.1)
-
-set (CMAKE_CXX_STANDARD 11)
+cmake_minimum_required(VERSION 3.8)
 
 if(MSVC)
   add_definitions(-D_WIN32_WINNT=0x600)
@@ -46,13 +44,14 @@ if(GRPC_AS_SUBMODULE)
   # Include the gRPC's cmake build (normally grpc source code would live
   # in a git submodule called "third_party/grpc", but this example lives in
   # the same repository as gRPC sources, so we just look a few directories up)
-  add_subdirectory(../../.. ${CMAKE_CURRENT_BINARY_DIR}/grpc EXCLUDE_FROM_ALL)
+  add_subdirectory(./libs/grpc ${CMAKE_CURRENT_BINARY_DIR}/grpc EXCLUDE_FROM_ALL)
   message(STATUS "Using gRPC via add_subdirectory.")
 
   # After using add_subdirectory, we can now use the grpc targets directly from
   # this build.
   set(_PROTOBUF_LIBPROTOBUF libprotobuf)
   set(_REFLECTION grpc++_reflection)
+  set(_ORCA_SERVICE grpcpp_orca_service)
   if(CMAKE_CROSSCOMPILING)
     find_program(_PROTOBUF_PROTOC protoc)
   else()
@@ -97,7 +96,7 @@ else()
 
   # Find Protobuf installation
   # Looks for protobuf-config.cmake file installed by Protobuf's cmake installation.
-  set(protobuf_MODULE_COMPATIBLE TRUE)
+  option(protobuf_MODULE_COMPATIBLE TRUE)
   find_package(Protobuf CONFIG REQUIRED)
   message(STATUS "Using protobuf ${Protobuf_VERSION}")
 

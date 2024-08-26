@@ -5,31 +5,17 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug)
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS} -std=c++17 -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS} -std=c++20 -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g")
 
-# cloning gRPC at configure time.
-message(STATUS "Using gRPC via add_subdirectory (FetchContent).")
-include(FetchContent)
-FetchContent_Declare(
-  grpc
-  GIT_REPOSITORY https://github.com/grpc/grpc.git
-  GIT_TAG        v1.57.0)
-FetchContent_MakeAvailable(grpc)
-# GIT_TAG        v1.38.1)
+# This depends on how the setup script install the grpc
+set(grpc_prefix "$ENV{HOME}/.local")
 
-# Since FetchContent uses add_subdirectory under the hood, we can use
-# the grpc targets directly from this build.
-set(_PROTOBUF_LIBPROTOBUF libprotobuf)
-set(_REFLECTION grpc++_reflection)
-set(_PROTOBUF_PROTOC $<TARGET_FILE:protoc>)
-set(_GRPC_GRPCPP grpc++)
-if(CMAKE_CROSSCOMPILING)
-  find_program(_GRPC_CPP_PLUGIN_EXECUTABLE grpc_cpp_plugin)
-else()
-  set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:grpc_cpp_plugin>)
-endif()
+set(CMAKE_PREFIX_PATH ${grpc_prefix} CACHE PATH "libs prefix path")
+
+# includes grpc
+include(cmake/common.cmake)
 
 # Proto file
 get_filename_component(dp_proto "protos/accumulator.proto" ABSOLUTE)
@@ -84,4 +70,4 @@ target_link_libraries(wcServer
   ${TORCH_LIBRARIES})
 
 
-set_property(TARGET wcClient wcServer PROPERTY CXX_STANDARD 17)
+set_property(TARGET wcClient wcServer PROPERTY CXX_STANDARD 20)
