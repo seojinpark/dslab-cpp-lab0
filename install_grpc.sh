@@ -6,7 +6,9 @@ sudo apt install -y cmake \
 	build-essential \
 	autoconf \
        	libtool \
-       	pkg-config
+       	pkg-config \
+	ninja-build \
+	libssl-dev
 
 function install_mqtt_c_lib {
 	TMP_FOLDER="/tmp/mosquitto"
@@ -34,7 +36,7 @@ pushd $HOME
 git clone https://github.com/USC-NSL-DDB/grpc.git
 
 cd grpc
-git submodule update --init --recursive
+git submodule update --init --recursive --recursive -j$(nproc) --depth 1
 mkdir -p cmake/build
 cd cmake/build
 cmake -G Ninja \
