@@ -8,7 +8,16 @@ sudo apt install -y cmake \
     libtool \
     pkg-config \
 	ninja-build \
-	libssl-dev
+	libssl-dev \
+	gcc \
+	g++ \
+	make \
+	cmake-curses-gui \
+	wget \
+	unzip \
+	curl \
+	gdb \
+	cgdb
 
 function install_mqtt_c_lib {
 	TMP_FOLDER="/tmp/mosquitto"
