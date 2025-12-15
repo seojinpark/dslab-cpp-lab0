@@ -5,8 +5,8 @@ sudo apt install -y cmake \
 	git \
 	build-essential \
 	autoconf \
-       	libtool \
-       	pkg-config \
+    libtool \
+    pkg-config \
 	ninja-build \
 	libssl-dev
 
@@ -32,11 +32,9 @@ mkdir -p $MY_INSTALL_DIR
 export PATH="$MY_INSTALL_DIR/bin:$PATH"
 
 pushd $HOME
-# git clone --recurse-submodules -b v1.64.0 --depth 1 --shallow-submodules https://github.com/grpc/grpc
-git clone https://github.com/USC-NSL-DDB/grpc.git
+git clone --depth 1 --recurse-submodules -j4 https://github.com/USC-NSL-DDB/grpc.git
 
 cd grpc
-git submodule update --init --recursive --recursive -j$(nproc) --depth 1
 mkdir -p cmake/build
 cd cmake/build
 cmake -G Ninja \
