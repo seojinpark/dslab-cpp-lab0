@@ -41,7 +41,7 @@ mkdir -p $MY_INSTALL_DIR
 export PATH="$MY_INSTALL_DIR/bin:$PATH"
 
 pushd $HOME
-git clone --depth 1 --recurse-submodules -j4 https://github.com/USC-NSL-DDB/grpc.git
+git clone --depth 1 --recurse-submodules -j$(nproc) https://github.com/USC-NSL-DDB/grpc.git
 
 cd grpc
 mkdir -p cmake/build
