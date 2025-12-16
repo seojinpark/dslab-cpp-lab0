@@ -3,8 +3,10 @@
 #include <thread>
 #include <memory>
 #include <string>
+#include <cstring>
 #include <getopt.h>
 #include "rpcService.h"
+#include "ddb/integration.hpp"
 
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
@@ -22,6 +24,11 @@ char* myAddr;           // includes port number.
 std::unique_ptr<AccumulatorServiceImpl> grpcService;
 std::unique_ptr<grpc::Server> grpcServer;
 
+// DDB: options
+bool ddb = false;
+char* ddb_host_ip = (char*)"127.0.0.1";
+char* ddb_proc_alias = (char*)"wc_server";
+
 void initGrpcServer() {
   std::string server_address(myAddr);
   grpcService = std::make_unique<AccumulatorServiceImpl>();
@@ -38,13 +45,29 @@ void initGrpcServer() {
 void parse_args(int argc, char** argv) {
   static struct option long_options[] = {
       {"bind", required_argument, NULL, 'i'},
+      // DDB: options
+      {"ddb", no_argument, NULL, 0},
+      {"ddb_host_ip", required_argument, NULL, 0},
+      {"ddb_proc_alias", required_argument, NULL, 0},
       {NULL, 0, NULL, 0}
   };
 
   // loop over all of the options
   signed char ch;
-  while ((ch = getopt_long(argc, argv, "t:a:", long_options, NULL)) != -1) {
+  int option_index = 0;
+  while ((ch = getopt_long(argc, argv, "t:a:", long_options, &option_index)) != -1) {
     switch (ch) {
+      case 0:
+        // DDB: options
+        // Long-only options
+        if (strcmp(long_options[option_index].name, "ddb") == 0) {
+          ddb = true;
+        } else if (strcmp(long_options[option_index].name, "ddb_host_ip") == 0) {
+          ddb_host_ip = optarg;
+        } else if (strcmp(long_options[option_index].name, "ddb_proc_alias") == 0) {
+          ddb_proc_alias = optarg;
+        }
+        break;
       case 'i':
         myAddr = optarg;
         break;
@@ -58,6 +81,15 @@ void parse_args(int argc, char** argv) {
 int main(int argc, char** argv) {
   parse_args(argc, argv);
   
+  // DDB: initialization
+  if (ddb) {
+    auto cfg = DDB::Config::get_default(ddb_host_ip)
+                   .with_alias(ddb_proc_alias)
+                   .with_hash(ddb_proc_alias);
+    auto connector = DDB::DDBConnector(cfg);
+    connector.init();
+  }
+
   initGrpcServer();
   grpcServer->Wait();
   

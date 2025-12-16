@@ -6,8 +6,10 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS} -std=c++20 -Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g")
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # This depends on how the setup script install the grpc
 set(grpc_prefix "$ENV{HOME}/.local")
@@ -39,6 +41,9 @@ add_custom_command(
 # Include generated *.pb.h files
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
+# Include DDB headers
+include_directories("${CMAKE_PREFIX_PATH}/include")
+
 # dp_grpc_proto
 add_library(dp_grpc_proto
   ${dp_grpc_srcs}
@@ -48,7 +53,9 @@ add_library(dp_grpc_proto
 target_link_libraries(dp_grpc_proto
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
-  ${_PROTOBUF_LIBPROTOBUF})
+  ${_PROTOBUF_LIBPROTOBUF}
+  paho-mqtt3c
+)
 
 # Linking info for runtime.
 add_executable(wcClient
