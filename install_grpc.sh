@@ -17,7 +17,8 @@ sudo apt install -y cmake \
 	unzip \
 	curl \
 	gdb \
-	cgdb
+	cgdb \
+	clangd
 
 function install_mqtt_c_lib {
 	TMP_FOLDER="/tmp/mosquitto"

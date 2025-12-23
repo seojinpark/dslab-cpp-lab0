@@ -1,6 +1,10 @@
 ---
 Framework: grpc
 
+PrerunGdbCommands:
+  - name: "Pretty Print for CPP"
+    command: "-enable-pretty-printing"
+
 ServiceDiscovery:
   Broker:
     hostname: 127.0.0.1
