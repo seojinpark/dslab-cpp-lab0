@@ -1,6 +1,13 @@
 ---
 Framework: grpc
 
+FrameFilter:
+  filter_preset:
+    - "cpp-stdlib"
+    - "grpc"
+    - "protobuf-gen"
+    - "ddb-runtime"
+
 PrerunGdbCommands:
   - name: "Pretty Print for CPP"
     command: "-enable-pretty-printing"
