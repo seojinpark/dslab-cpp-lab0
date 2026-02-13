@@ -42,6 +42,7 @@ mkdir -p $MY_INSTALL_DIR
 export PATH="$MY_INSTALL_DIR/bin:$PATH"
 
 pushd $HOME
+rm -rf grpc
 git clone --depth 1 --recurse-submodules -j$(nproc) https://github.com/USC-NSL-DDB/grpc.git
 
 cd grpc
